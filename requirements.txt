@@ -1,0 +1,7 @@
+install 
+torch 
+torchvision 
+torchaudio
+matplotlib
+tinycudann @ git+https://github.com/NVlabs/tiny-cuda-nn/#subdirectory=bindings/torch
+
