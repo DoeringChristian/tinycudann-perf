@@ -52,14 +52,14 @@ fn main() {
 
         for i in 0..n_iters {
             let report = graph.launch(&device).unwrap();
-            duration += report.exec.cpu_duration;
-            // duration += report
-            //     .exec
-            //     .passes
-            //     .iter()
-            //     .find(|pass| pass.name == "Fused MLP")
-            //     .unwrap()
-            //     .duration;
+            // duration += report.exec.cpu_duration;
+            duration += report
+                .exec
+                .passes
+                .iter()
+                .find(|pass| pass.name == "Fused MLP")
+                .unwrap()
+                .duration;
         }
         let end = Instant::now();
 
