@@ -15,4 +15,5 @@ if __name__ == "__main__":
     plt.xlabel("batch size")
     plt.ylabel("throughput")
     plt.legend()
-    plt.savefig("out/cmp.svg")
+    # plt.savefig("out/cmp.svg")
+    plt.show()

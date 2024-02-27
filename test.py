@@ -29,7 +29,7 @@ if __name__ == "__main__":
     for param in model.parameters():
         print(f"{param.shape=}")
 
-    N = 100
+    N = 1000
 
     batch_sizes = [int(2**i) for i in range(14, 22)]
 
@@ -39,7 +39,7 @@ if __name__ == "__main__":
     for batch_size in batch_sizes:
         print(f"{batch_size=:_}")
 
-        input = torch.randn([batch_size, in_width], device=device)
+        input = torch.ones([batch_size, in_width], device=device)
 
         start = time.perf_counter()
         with torch.no_grad():

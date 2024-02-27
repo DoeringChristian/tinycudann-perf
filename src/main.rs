@@ -1,4 +1,4 @@
-use std::time::Instant;
+use std::time::{Duration, Instant};
 
 use half::f16;
 use hephaestus_jit::{tr, vulkan};
@@ -20,7 +20,7 @@ fn main() {
     let mut throughputs = vec![];
     let mut batch_sizes = vec![];
 
-    let n_iters = 100;
+    let n_iters = 1000;
 
     let device = vulkan(0);
 
@@ -47,13 +47,23 @@ fn main() {
 
         let graph = tr::compile();
 
+        let mut duration = Duration::from_nanos(0);
         let start = Instant::now();
+
         for i in 0..n_iters {
             let report = graph.launch(&device).unwrap();
+            duration += report.exec.cpu_duration;
+            // duration += report
+            //     .exec
+            //     .passes
+            //     .iter()
+            //     .find(|pass| pass.name == "Fused MLP")
+            //     .unwrap()
+            //     .duration;
         }
         let end = Instant::now();
 
-        let duration = end - start;
+        // let duration = end - start;
 
         let throughput = (batch_size * n_iters) as f64 / duration.as_secs_f64();
         println!("\tthroughput = {throughput}");
@@ -64,6 +74,9 @@ fn main() {
 
         batch_sizes.push(batch_size);
         throughputs.push(throughput);
+
+        // Sleep to cool off gpu
+        std::thread::sleep(Duration::from_secs_f64(1.0));
     }
 
     let pickle = PickleFile {
@@ -71,11 +84,11 @@ fn main() {
         throughputs,
     };
 
-    let mut file = std::fs::File::options()
+    if let Ok(mut file) = std::fs::File::options()
         .write(true)
         .create(true)
         .open("out/hep.pkl")
-        .unwrap();
-
-    serde_pickle::to_writer(&mut file, &pickle, Default::default()).unwrap();
+    {
+        serde_pickle::to_writer(&mut file, &pickle, Default::default()).unwrap();
+    }
 }
