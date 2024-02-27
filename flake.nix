@@ -13,6 +13,11 @@
         config.allowUnfree = true;
         config.cudaSupport = true;
         config.cudaVersion = "12";
+        overlays = [
+          (final: prev: {
+            matplotlib = prev.matplotlib.override { enableGtk3 = true; };
+          })
+        ];
       };
 
       cuda-common-redist = with pkgs.cudaPackages; [
@@ -41,11 +46,22 @@
       devShells.${system}.default = pkgs.mkShell {
         packages = [
           backendStdenv
+          pkgs.glslang
+          pkgs.vulkan-headers
+          pkgs.vulkan-loader
+          pkgs.vulkan-validation-layers
 
-          (pkgs.python3.withPackages (ps: [
-            ps.pip
-            ps.virtualenv
-            ps.setuptools
+          pkgs.gobject-introspection
+          pkgs.gtk3
+
+          (pkgs.python3.withPackages (ps: with ps;[
+            pip
+            virtualenv
+            setuptools
+            ipython
+            pygobject3
+            # pygobject3
+            # matplotlib
           ]))
         ] ++ [ cuda-native-redist ];
         shellHook = ''

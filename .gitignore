@@ -1,0 +1,7 @@
+/target
+nix/
+__pycache__/
+.venv/
+out/
+test/
+

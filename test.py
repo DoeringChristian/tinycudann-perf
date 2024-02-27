@@ -3,6 +3,7 @@ import torch
 import tinycudann as tcnn
 import time
 import matplotlib.pyplot as plt
+import pickle
 
 
 if __name__ == "__main__":
@@ -57,6 +58,14 @@ if __name__ == "__main__":
         print(f"throughput: {throughput:.2E}/s")
         print(f"flops: {flops:.2E}/s")
 
-    plt.plot(batch_sizes, throughputs)
-    plt.xscale("log", base=2)
-    plt.show()
+    data = {
+        "batch_sizes": batch_sizes,
+        "throughputs": throughputs,
+    }
+
+    with open("out/tcnn.pkl", "wb") as f:
+        pickle.dump(data, f)
+
+    # plt.plot(batch_sizes, throughputs)
+    # plt.xscale("log", base=2)
+    # plt.show()
