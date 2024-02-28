@@ -4,6 +4,12 @@ import numpy
 import pickle
 import json
 
+mpl.rcParams.update(
+    {
+        "pgf.texsystem": "pdflatex",
+    }
+)
+
 if __name__ == "__main__":
     with open("out/hep.pkl", "rb") as f:
         hep = pickle.load(f)
