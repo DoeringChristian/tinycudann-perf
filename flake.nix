@@ -54,6 +54,10 @@
           pkgs.gobject-introspection
           pkgs.gtk3
 
+          pkgs.texlive.combined.scheme-medium
+          pkgs.dejavu_fonts
+          # pkgs.texliveSmall
+
           (pkgs.python3.withPackages (ps: with ps;[
             pip
             virtualenv

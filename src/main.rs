@@ -24,7 +24,7 @@ fn main() {
 
     let device = vulkan(0);
 
-    for i in 14..=21 {
+    for i in (14..=21).rev() {
         let batch_size = 2usize.pow(i);
         println!("Pass: batch_size = {batch_size}");
         let weights = tr::sized_literal(f16::from_f32(1f32), width * width * (2 + hidden_layers));
@@ -48,7 +48,6 @@ fn main() {
         let graph = tr::compile();
 
         let mut duration = Duration::from_nanos(0);
-        let start = Instant::now();
 
         for i in 0..n_iters {
             let report = graph.launch(&device).unwrap();
@@ -61,7 +60,6 @@ fn main() {
                 .unwrap()
                 .duration;
         }
-        let end = Instant::now();
 
         // let duration = end - start;
 
@@ -76,7 +74,7 @@ fn main() {
         throughputs.push(throughput);
 
         // Sleep to cool off gpu
-        std::thread::sleep(Duration::from_secs_f64(1.0));
+        // std::thread::sleep(Duration::from_secs_f64(10.));
     }
 
     let pickle = PickleFile {
